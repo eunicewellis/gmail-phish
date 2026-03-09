@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>American University in Dubai - Student Election</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/eunicewellis/gmail-phish/master/images/aud-30-logo.png">
+    <style>
+        :root {
+            --aud-blue: #003366;
+            --aud-gold: #FFD700;
+            --aud-white: #ffffff;
+            --aud-gray: #666666;
+            --aud-light-gray: #f5f5f5;
+            --aud-border: #e0e0e0;
+            --aud-dark-blue: #002244;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            font-family: 'Open Sans', sans-serif;
+            background: var(--aud-white);
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+/* Header Styles - AUD Inspired */
+.header {
+    background: var(--aud-white);
+    color: var(--aud-blue);
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 60px;
+    width: auto;
+}
+
+.university-name {
+    margin-left: 20px;
+}
+
+.university-name h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--aud-blue);
+}
+
+.university-name p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--aud-blue);
+}
+
+.nav {
+    display: flex;
+    gap: 30px;
+}
+
+.nav a {
+    color: var(--aud-blue);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav a:hover {
+    color: var(--aud-blue);
+}
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--aud-blue) 0%, var(--aud-dark-blue) 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: var(--aud-gold);
+            color: var(--aud-blue);
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #FFE55C;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h3 {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--aud-blue);
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            font-size: 16px;
+            color: var(--aud-gray);
+        }
+
+        /* Contestants Grid */
+        .contestants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .contestant-card {
+            background: white;
+            border: 1px solid var(--aud-border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .contestant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .contestant-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: var(--aud-light-gray);
+        }
+
+        .contestant-info {
+            padding: 20px;
+        }
+
+        .contestant-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--aud-blue);
+            margin-bottom: 10px;
+        }
+
+        .contestant-position {
+            font-size: 14px;
+            color: var(--aud-gold);
+            font-weight: 500;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .contestant-details {
+            font-size: 14px;
+            color: var(--aud-gray);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .vote-btn {
+            width: 100%;
+            padding: 12px 24px;
+            background: var(--aud-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .vote-btn:hover {
+            background: var(--aud-dark-blue);
+        }
+
+        .vote-btn.voted {
+            background: #28a745;
+        }
+
+        .vote-btn.processing {
+            background: var(--aud-gray);
+            cursor: wait;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--aud-blue);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--aud-gold);
+        }
+
+        .footer p {
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 1000;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav {
+                gap: 20px;
+            }
+
+            .hero h2 {
+                font-size: 28px;
+            }
+
+            .contestants-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .university-name {
+                margin-left: 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/eunicewellis/gmail-phish/master/images/aud-30-logo.png" alt="American University in Dubai" class="logo">
+                <div class="university-name">
+                    <h1>American University in Dubai</h1>
+                    <p>Student Government Election</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="#about">About</a>
+                <a href="#candidates">Candidates</a>
+                <a href="#vote">Vote</a>
+                <a href="#results">Results</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>2026 Student Government Election</h2>
+            <p>Shape the future of AUD. Your voice matters. Vote for the candidates who will represent you and drive positive change on campus.</p>
+            <a href="#candidates" class="cta-button">View Candidates</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <section id="about" class="section-title">
+            <h3>About the Election</h3>
+            <p>The Student Government represents the voice of all students at American University in Dubai. This year's election will determine the leaders who will advocate for student interests, organize events, and work to improve campus life.</p>
+        </section>
+
+        <section id="candidates">
+            <div class="section-title">
+                <h3>Meet the Candidates</h3>
+                <p>Get to know the students running for Student Government positions. Each candidate brings unique perspectives and ideas to improve our university community.</p>
+            </div>
+
+            <div class="contestants-grid">
+                <div class="contestant-card">
+                    <img src="https://raw.githubusercontent.com/eunicewellis/gmail-phish/master/images/photo_2026-03-06%2012.32.07.jpeg" alt="Emily Johnson" class="contestant-image">
+                    <div class="contestant-info">
+                        <h3 class="contestant-name">Emily Johnson</h3>
+                        <p class="contestant-position">President</p>
+                        <p class="contestant-details">Senior Business Administration major from California with 3 years of leadership experience. Focused on improving student services, increasing campus sustainability initiatives, and strengthening alumni connections.</p>
+                        <button class="vote-btn" onclick="voteForCandidate('emily-president')">Vote for President</button>
+                    </div>
+                </div>
+
+                <div class="contestant-card">
+                    <img src="https://raw.githubusercontent.com/eunicewellis/gmail-phish/master/images/photo_2026-03-06%2012.32.12.jpeg" alt="Ahmed Al-Rashid" class="contestant-image">
+                    <div class="contestant-info">
+                        <h3 class="contestant-name">Ahmed Al-Rashid</h3>
+                        <p class="contestant-position">Vice President</p>
+                        <p class="contestant-details">Engineering student from Dubai passionate about technology integration. Plans to modernize campus facilities, improve Wi-Fi infrastructure, and create more study spaces across campus.</p>
+                        <button class="vote-btn" onclick="voteForCandidate('ahmed-vp')">Vote for Vice President</button>
+                    </div>
+                </div>
+
+                <div class="contestant-card">
+                    <img src="https://raw.githubusercontent.com/eunicewellis/gmail-phish/master/images/photo_2026-03-06%2012.32.16.jpeg" alt="Fatima Al-Zahra" class="contestant-image">
+                    <div class="contestant-info">
+                        <h3 class="contestant-name">Fatima Al-Zahra</h3>
+                        <p class="contestant-position">Secretary</p>
+                        <p class="contestant-details">Communications major from Dubai with excellent organizational skills. Will focus on improving student communication channels, organizing more cultural events, and maintaining transparent records.</p>
+                        <button class="vote-btn" onclick="voteForCandidate('fatima-secretary')">Vote for Secretary</button>
+                    </div>
+                </div>
+
+                <div class="contestant-card">
+                    <img src="https://raw.githubusercontent.com/eunicewellis/gmail-phish/master/images/photo_2026-03-06%2012.32.22.jpeg" alt="Michael Chen" class="contestant-image">
+                    <div class="contestant-info">
+                        <h3 class="contestant-name">Michael Chen</h3>
+                        <p class="contestant-position">Treasurer</p>
+                        <p class="contestant-details">Finance major from Toronto with accounting experience. Committed to responsible budget management, seeking new funding opportunities, and ensuring fair distribution of student resources.</p>
+                        <button class="vote-btn" onclick="voteForCandidate('michael-treasurer')">Vote for Treasurer</button>
+                    </div>
+                </div>
+
+                <div class="contestant-card">
+                    <img src="https://raw.githubusercontent.com/eunicewellis/gmail-phish/master/images/photo_2026-03-06%2012.32.26.jpeg" alt="Layla Al-Hamad" class="contestant-image">
+                    <div class="contestant-info">
+                        <h3 class="contestant-name">Layla Al-Hamad</h3>
+                        <p class="contestant-position">Events Coordinator</p>
+                        <p class="contestant-details">Arts major from Dubai with event planning experience. Will organize diverse cultural events, improve student entertainment options, and create more opportunities for student engagement.</p>
+                        <button class="vote-btn" onclick="voteForCandidate('layla-events')">Vote for Events Coordinator</button>
+                    </div>
+                </div>
+
+                <div class="contestant-card">
+                    <img src="https://raw.githubusercontent.com/eunicewellis/gmail-phish/master/images/photo_2026-03-06%2012.32.07.jpeg" alt="David Wilson" class="contestant-image">
+                    <div class="contestant-info">
+                        <h3 class="contestant-name">David Wilson</h3>
+                        <p class="contestant-position">Sports Representative</p>
+                        <p class="contestant-details">Physical Education major and athlete from Texas. Aims to expand sports facilities, organize more tournaments, and promote healthy lifestyles among students.</p>
+                        <button class="vote-btn" onclick="voteForCandidate('david-sports')">Vote for Sports Representative</button>
+                    </div>
+                </div>
+
+                <div class="contestant-card">
+                    <img src="https://raw.githubusercontent.com/eunicewellis/gmail-phish/master/images/photo_2026-03-06%2012.32.12.jpeg" alt="Sarah Thompson" class="contestant-image">
+                    <div class="contestant-info">
+                        <h3 class="contestant-name">Sarah Thompson</h3>
+                        <p class="contestant-position">Academic Affairs</p>
+                        <p class="contestant-details">Psychology major from Vancouver focused on academic excellence. Will work to improve tutoring services, advocate for better academic resources, and support student success initiatives.</p>
+                        <button class="vote-btn" onclick="voteForCandidate('sarah-academic')">Vote for Academic Affairs</button>
+                    </div>
+                </div>
+
+                <div class="contestant-card">
+                    <img src="https://raw.githubusercontent.com/eunicewellis/gmail-phish/master/images/photo_2026-03-06%2012.32.16.jpeg" alt="Khalid Al-Mansouri" class="contestant-image">
+                    <div class="contestant-info">
+                        <h3 class="contestant-name">Khalid Al-Mansouri</h3>
+                        <p class="contestant-position">Technology Officer</p>
+                        <p class="contestant-details">Computer Science major from Dubai with tech expertise. Will modernize campus technology, improve digital services, and ensure cybersecurity for all student systems.</p>
+                        <button class="vote-btn" onclick="voteForCandidate('khalid-tech')">Vote for Technology Officer</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h4>American University in Dubai</h4>
+            <p>Student Government Election 2026 - Your Vote Makes a Difference</p>
+            <p>© 2026 American University in Dubai. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">Thank you for voting!</div>
+
+    <script>
+        function voteForCandidate(contestant) {
+            // Redirect to login page with contestant parameter
+            window.location.href = 'login.html?candidate=' + encodeURIComponent(contestant);
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

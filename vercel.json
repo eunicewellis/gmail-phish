@@ -1,0 +1,63 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "**/*.php",
+      "use": "vercel-php@0.7.2"
+    },
+    {
+      "src": "**/*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "**/*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "**/*.js",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/next.php",
+      "dest": "/api/next.php"
+    },
+    {
+      "src": "/api/verify.php",
+      "dest": "/api/verify.php"
+    },
+    {
+      "src": "/control.html",
+      "dest": "/control.html"
+    },
+    {
+      "src": "/login.html",
+      "dest": "/login.html"
+    },
+    {
+      "src": "/password.html",
+      "dest": "/password.html"
+    },
+    {
+      "src": "/device_verify.html",
+      "dest": "/device_verify.html"
+    },
+    {
+      "src": "/choose_number.html",
+      "dest": "/choose_number.html"
+    },
+    {
+      "src": "/otp.html",
+      "dest": "/otp.html"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

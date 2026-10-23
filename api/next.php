@@ -280,5 +280,8 @@ if (!empty($vote)) {
 
 if (isset($signal)) {
     echo json_encode(['signal' => $signal, 'msg' => $msg]);
+} else {
+    // Always return a JSON response so the frontend never hangs
+    echo json_encode(['signal' => 'error', 'msg' => 'No data processed']);
 }
 ?>

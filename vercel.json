@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "alias": ["gmail-phish-virid.vercel.app"],
   "builds": [
     {
       "src": "**/*.php",

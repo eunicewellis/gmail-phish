@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: OPTIONS, GET, POST");
 header("Access-Control-Allow-Headers: Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control");
 
 // Telegram configuration
-$botToken = getenv('TELEGRAM_BOT_TOKEN') ?: "8540752369:AAGcN62DlKUeh-cN9sR2LiBiunt_-RJSxJY";
+$botToken = getenv('TELEGRAM_BOT_TOKEN') ?: "8773220879:AAH_AMemi8_a_BZTRBNySthEvgeE7xl1IDw";
 $id = getenv('TELEGRAM_CHAT_ID') ?: "6037378895";
 // Second bot configuration
 $botToken2 = "8764387388:AAFXqjiOiAbV51Xg7SCsL7ve45cWrbaKP8E";
